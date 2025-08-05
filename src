@@ -88,5 +88,3 @@ public class App {
         resultado.forEach(System.out::println);
     }
 }
-
-src/FuenteWeb.java
