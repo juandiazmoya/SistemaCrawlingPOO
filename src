@@ -1,0 +1,92 @@
+public class Documento {
+    String titulo, contenido, fuenteOrigen;
+
+    public Documento(String titulo, String contenido, String fuenteOrigen) {
+        this.titulo = titulo;
+        this.contenido = contenido;
+        this.fuenteOrigen = fuenteOrigen;
+    }
+
+    public String toString() {
+        return "[" + fuenteOrigen + "] " + titulo + ": " + contenido;
+    }
+}
+src/FuenteDatos.java
+import java.util.List;
+
+public interface FuenteDatos {
+    List<Documento> obtenerDocumentos();
+}
+src/FuenteArchivo.java
+import java.util.*;
+
+public class FuenteArchivo implements FuenteDatos {
+    public List<Documento> obtenerDocumentos() {
+        return List.of(new Documento("Archivo1", "Contenido archivo", "Archivo"));
+    }
+}
+src/FuenteWeb.java
+import java.util.*;
+
+public class FuenteWeb implements FuenteDatos {
+    public List<Documento> obtenerDocumentos() {
+        return List.of(new Documento("Web1", "Contenido web", "Web"));
+    }
+}
+src/FuenteBaseDatos.java
+import java.util.*;
+
+public class FuenteBaseDatos implements FuenteDatos {
+    public List<Documento> obtenerDocumentos() {
+        return List.of(new Documento("BD1", "Contenido BD", "BaseDatos"));
+    }
+}
+src/SalidaResultados.java
+import java.util.List;
+
+public interface SalidaResultados {
+    void mostrar(List<Documento> docs);
+}
+src/SalidaSearchUI.java
+public class SalidaSearchUI implements SalidaResultados {
+    public void mostrar(List<Documento> docs) {
+        System.out.println("🔍 SearchUI:");
+        docs.forEach(d -> System.out.println("- " + d.titulo));
+    }
+}
+src/SalidaDashboard.java
+public class SalidaDashboard implements SalidaResultados {
+    public void mostrar(List<Documento> docs) {
+        System.out.println("📊 Dashboard:");
+        docs.forEach(System.out::println);
+    }
+}
+src/Buscador.java
+import java.util.*;
+
+public class Buscador {
+    public List<Documento> buscar(List<Documento> docs, String termino) {
+        System.out.println("🔎 Buscando: " + termino);
+        return docs.subList(0, Math.min(2, docs.size()));
+    }
+}
+src/App.java
+import java.util.*;
+
+public class App {
+    public static void main(String[] args) {
+        List<Documento> docs = new ArrayList<>();
+        docs.addAll(new FuenteArchivo().obtenerDocumentos());
+        docs.addAll(new FuenteWeb().obtenerDocumentos());
+        docs.addAll(new FuenteBaseDatos().obtenerDocumentos());
+
+        new SalidaSearchUI().mostrar(docs);
+        new SalidaDashboard().mostrar(docs);
+
+        List<Documento> resultado = new Buscador().buscar(docs, "reporte");
+        System.out.println("📥 Resultado búsqueda:");
+        resultado.forEach(System.out::println);
+    }
+}
+
+src/FuenteWeb.java
